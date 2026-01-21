@@ -1,0 +1,1967 @@
+PEMROGRAMAN FLUTTER DENGAN WEB API LARAVEL DASAR 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Disusu Oleh : 
+Mokhamad Ramdhani Raharjo, S.Kom., M.Kom 
+ 
+ 
+FAKULTAS TEKNOLOGI INFORMASI 
+UNIVERSITAS ISLAM KALIMANTAN MUHAMMAD ARSYAD AL BANJARI 
+BANJARMASIN 
+2024 
+ 
+ 
+ 
+ 
+DAFTAR ISI 
+ 
+PERTEMUAN I....................................................................................................... 3 
+1.1 PERSIAPAN TOOLS .......................................................................................... 3 
+1.2 PERMBUATAN PROJECT WEB-API SEKOLAH .................................................... 13 
+1.3 PENGUJIAN ENDPOINT DAN INSTALASI POSTMAN .......................................... 17 
+1.4 PEMBUATAN PROJECT AWAL FLUTTER ............................................................ 20 
+PERTEMUAN II ................................................................................................... 27 
+2.1 Kode Tambah Data Mahasiswa ....................................................................... 27 
+2.2 Kode View Mahasiswa ................................................................................... 29 
+2.3 Kode Ubah Data Mahasiswa........................................................................... 31 
+PERTEMUAN III .................................................................................................... 36 
+3.1 Persiapan Model ,Controller, Route dan Migration Matakuliah .............................. 36 
+3.2 Persiapan Model, Controller dan View Mata Kuliah pada Flutter Mobile ............. 40 
+3.3 Report PDF data Mata Kuliah .......................................................................... 47 
+PERTEMUAN IV ................................................................................................... 50 
+4.1 Persiapan Menu Side atau Drawer Menu ......................................................... 50 
+4.2 Persiapan Web API Jadwal ............................................................................. 52 
+4.3 Persiapan Model,Controller dan View Pada Flutter........................................... 55 
+4.4 Persiapan Slide Menu .................................................................................... 60 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+PERTEMUAN I 
+1.1 PERSIAPAN TOOLS 
+ INTALASI ANDROID STUDIO 
+- 
+Silahkan download dilink berikut ini : 
+https://developer.android.com/studio 
+- 
+Tahapan Instalasi Android Studio 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Klik Tombol Next untuk instalasi SDK Android 
+ 
+Silahkan tentukan lokasi instalasi Sdk 
+ 
+ 
+Pilih Accept dan Klik Tombol Finish dan tunggu sampai proses 
+download selesai 
+ 
+- 
+Project Baru Pada Android Studio 
+Pada Instalasi pertama android studio buat project baru dengan nama 
+“test01” klik tombol New Project 
+ 
+ 
+ 
+ 
+Silahkan pilih yang Empty Activity kemudian klik tombol Next 
+ 
+ 
+Klik Allow untuk menginjinkan adb 
+ 
+ 
+ 
+ 
+ 
+ KONFIGURASI SDK 
+Klik menu icon setting kemudian pilih menu SDK Manager 
+ 
+ 
+ 
+ 
+Silahkan Centang seperti tampilan gambar diatas, jika sudah klik tombol 
+apply. Tunggu sampai proses selesai dan klik tombol OK. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ KONFIGURASI EMULATOR 
+Klik menu ikon Device Manager seperti gambar dibawah ini: 
+ 
+ 
+Klik Icon Plus kemudian klik Create Virtual Device 
+ 
+ 
+Silahkan pilih tipe device yang diingin diinstall Kemudian Klik Tombol Next 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Silahkan pilih System Image yang ingin diinstall pada emaulator , klik 
+tombol next untuk proses lanjut. 
+ 
+ 
+ 
+ 
+ INSTALASI FLUTTER 
+- 
+Jalankan aplikasi VS Code pada menu extention ketikan Dart 
+kemudian install: 
+ 
+- 
+Pada vs code jika belum ada Dart SDK maka klik tombol Download 
+SDK 
+- 
+Arahkan lokasi folder ketempat yang diinginkan 
+ 
+Silahkan tunggu sampai proses selesai 
+ 
+- 
+Klik Add SDK to PATH 
+ 
+- 
+Tekan Ctrl + Shift + P pada VS Code pilih Run Flutter Doctor 
+Usahakan list semua kondisi tercentang semua jika masih ada yang silang 
+atau tanda seru maka silahkan diperbaiki seperti contoh dibawah ini 
+memiliki kesalahan, maka kita perbaiki: 
+ 
+- 
+Untuk penyelesaian SDK flutter belum terdaftar pada path windows secara 
+otomatis bisa ditambahkan manual pada edit Environment Variable – 
+System Variable – Path – Edit – New - Tambahkan lokasi flutter\bin. Jika 
+sudah ditambahkan maka akan bisa meyelesaikan Android toolchain. (Jika 
+sudah centang semua abaikan tahap ini). Jika Sudah ditambahkan maka 
+pengecekan flutter doctor bisa dijalankan Command Prompt Windows 
+seperti berikut ini: 
+ 
+ 
+- 
+Jalankan cmd kemudian ketikan seperti berikut: 
+ 
+ 
+Ketikan lagi pada cmd seperti dibawah ini, kemudian berikan persetujuan 
+‘y’ untuk menerima konfigurasi : 
+ 
+ 
+ 
+ 
+ 
+ 
+1.2 PERMBUATAN PROJECT WEB-API SEKOLAH 
+- 
+Jalankan Laragon buat project dengan nama ‘mahasiswa-api’ 
+ 
+ 
+ 
+ 
+- 
+Silahkan buka ﬁle .env dan konﬁgurasi koneksi database seperti berikut ini : 
+ 
+- 
+Persiapan Model dan Migrasi 
+Ketikan Migration pada terminal VS Code 
+php artisan make:model Mahasiswa -m 
+ 
+- 
+Pada ﬁle migration create_mahasiswa_table ketikan kode sebagai berikut: 
+ 
+- 
+Persiapan Migrate Mahasiswa 
+Ketikan kode seperti dibawah ini: 
+ 
+ 
+ 
+- 
+Pembuatan Mahasiswa Controller 
+Pada terminal VS Code ketikan kode seperti berikut ini: 
+php artisan make:controller MahasiswaController –api 
+ 
+ 
+Buka File MahasiswaController Ketikan Kode seperti berikut ini: 
+<?php 
+namespace App\Http\Controllers; 
+ 
+use App\Models\Mahasiswa; 
+use Illuminate\Http\Request; 
+ 
+class MahasiswaController extends Controller 
+{ 
+    public function index() 
+    { 
+        return Mahasiswa::all(); 
+    } 
+ 
+    public function store(Request $request) 
+    { 
+        $request->validate([ 
+            'npm' => 'required|string|unique:mahasiswa', 
+            'nama' => 'required|string', 
+            'tempat_lahir' => 'required|string', 
+            'tanggal_lahir' => 'required|date', 
+            'sex' => 'required|string', 
+            'alamat' => 'required|string', 
+            'telp' => 'required|string', 
+            'email' => 'required|string|email|unique:mahasiswa', 
+            'photo' => 'nullable|string', 
+        ]); 
+ 
+        return Mahasiswa::create($request->all()); 
+    } 
+ 
+    public function show($id) 
+    { 
+        return Mahasiswa::findOrFail($id); 
+    } 
+ 
+    public function update(Request $request, $id) 
+    { 
+        $mahasiswa = Mahasiswa::findOrFail($id); 
+        $request->validate([ 
+            'npm' => 
+'sometimes|required|string|unique:mahasiswa,npm,'.$mahasiswa->id, 
+            'email' => 
+'sometimes|required|string|email|unique:mahasiswa,email,'.$mahasiswa->id, 
+        ]); 
+ 
+        $mahasiswa->update($request->all()); 
+        return $mahasiswa; 
+    } 
+ 
+    public function destroy($id) 
+    { 
+        $mahasiswa = Mahasiswa::findOrFail($id); 
+        $mahasiswa->delete(); 
+        return response()->noContent(); 
+    } 
+} 
+ 
+ 
+- 
+Pendaftaran Route API 
+Daftarkan route pada controller yang sudah dibuat di ﬁle api.php pada folder 
+routes seperti kode dibawah ini: 
+ 
+ 
+Jalankan terminal VSCode dan ketikan ‘php artisan route:list’ untuk mengetahui 
+alamat yang akan digunakan di aplikasi mobile 
+ 
+1.3 PENGUJIAN ENDPOINT DAN INSTALASI POSTMAN 
+- 
+Silahkan Download dan install Postman Dekstop 
+Applicationhttps://www.postman.com/downloads/   atau menggunakan versi 
+online 
+- 
+Silahkan login dengan akun google atau sejenisnya 
+- 
+Persiapkan workspace seperti gambar berikut: 
+ 
+ 
+- 
+Jalankan Server dengan langsung menggunakan domain virtual host dari laragon ( 
+http://mahasiswa-api.test) atau ketikan pada terminal vs code ‘ php artisan serve dan 
+copy-kan alamat domain yang disediakan ke web browser. Pada Praktikum ini 
+menggunakan alamat domain virtual host 
+- 
+Penggunaan method untuk proses CRUD dengan penjelasan seperti berikut: 
+GET http://mahasiswa-api.test/mahasiswa untuk mengambil semua data 
+POST http://mahasiswa-api.test /mahasiswa untuk menambah data baru 
+GET http://mahasiswa-api.test /mahasiswa/{id} untuk mendapatkan satu data 
+PUT http://mahasiswa-api.test /mahasiswa/{id} untuk memperbarui data 
+DELETE http://mahasiswa-api.test /mahasiswa/{id} untuk menghapus data 
+ 
+ 
+ 
+ 
+ 
+ 
+- 
+Pengujian Simpan Data 
+Jalankan aplikasi Postman , klik tombol New -> HTTP -> Copy Pastekan URL -> 
+pilih method sebagai POST -> Pilih Body -> Pilih Raw -> Pilih JSON , Kemudian 
+Ketikan Kode seperti berikut jika sudah ketikan tombol Send: 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+- 
+Pengujian Ubah Data 
+Jalankan aplikasi Postman , klik tombol New -> HTTP -> Copy Pastekan URL -> 
+pilih method sebagai PUT -> Pilih Body -> Pilih Raw -> Pilih JSON , Kemudian 
+Ketikan Kode seperti berikut jika sudah ketikan tombol Send: 
+ 
+ 
+ 
+- 
+Pengujian Pencarian Data 
+Jalankan aplikasi Postman , klik tombol New -> HTTP -> Copy Pastekan URL -> 
+pilih method sebagai GET -> Pilih Body -> Pilih Raw -> Pilih JSON , Kemudian 
+Ketikan Kode seperti berikut jika sudah ketikan tombol Send: 
+ 
+ 
+ 
+- 
+Pengujian Penghapusan Data 
+Jalankan aplikasi Postman , klik tombol New -> HTTP -> Copy Pastekan URL -> 
+pilih method sebagai DELETE -> Pilih Body -> Pilih Raw -> Pilih JSON , Kemudian 
+Ketikan Kode seperti berikut jika sudah ketikan tombol Send: 
+ 
+ 
+1.4 PEMBUATAN PROJECT AWAL FLUTTER 
+- 
+Buat Project Flutter dengan nama appakademik 
+- 
+Penambahan Depedensi 
+tambahkan get dan http pada pubspec.yaml seperti contoh dibawah ini: 
+ 
+ 
+Kemudian jalan ‘flutter pub get’ pada terminal 
+ 
+ 
+ 
+ 
+ 
+- 
+Persiapan Model Mahasiswa 
+Buat folder dengan nama models didalam folder lib, kemudian buat file dengan 
+nama mahasiswa.dart dan ketikan kode seperti berikut: 
+class Mahasiswa { 
+  final int? id; 
+  final String npm; 
+  final String nama; 
+  final String tempatLahir; 
+  final String tanggalLahir; 
+  final String sex; 
+  final String alamat; 
+  final String telp; 
+  final String email; 
+  final String? photo; 
+ 
+  Mahasiswa({ 
+    this.id, 
+    required this.npm, 
+    required this.nama, 
+    required this.tempatLahir, 
+    required this.tanggalLahir, 
+    required this.sex, 
+    required this.alamat, 
+    required this.telp, 
+    required this.email, 
+    this.photo, 
+  }); 
+ 
+  factory Mahasiswa.fromJson(Map<String, dynamic> json) { 
+    return Mahasiswa( 
+      id: json['id'], 
+      npm: json['npm'], 
+      nama: json['nama'], 
+      tempatLahir: json['tempat_lahir'], 
+      tanggalLahir: json['tanggal_lahir'], 
+      sex: json['sex'], 
+      alamat: json['alamat'], 
+      telp: json['telp'], 
+      email: json['email'], 
+      photo: json['photo'], 
+    ); 
+  } 
+ 
+  Map<String, dynamic> toJson() { 
+    return { 
+      'npm': npm, 
+      'nama': nama, 
+      'tempat_lahir': tempatLahir, 
+      'tanggal_lahir': tanggalLahir, 
+      'sex': sex, 
+      'alamat': alamat, 
+      'telp': telp, 
+      'email': email, 
+      'photo': photo, 
+    }; 
+  } 
+} 
+ 
+ 
+ 
+- 
+Persiapan Controller Mahasiswa 
+Buat folder controllers didalam folder lib kemudian buat ﬁle dengan nama 
+mahasiswa_controller.dart dan ketikan kode seperti berikut: 
+import 'package:get/get.dart'; 
+import 'package:http/http.dart' as http; 
+import 'dart:convert'; 
+import '../models/mahasiswa.dart'; 
+ 
+class MahasiswaController extends GetxController { 
+  var mahasiswaList = <Mahasiswa>[].obs; 
+  // IP dari laravel dijalankan pada flutter run 
+  //final String apiUrl = 'http://127.0.0.1:8000/api/mahasiswa';  
+  //final String apiUrl = 'http://mahasiswa-api.tes/api/mahasiswa'; ' 
+ 
+  // untuk  emulator android studio gunakan IP dibawah ini 
+  final String apiUrl ='http://10.0.2.2:8000/api/mahasiswa'; 
+ 
+   @override 
+  void onInit() { 
+    super.onInit(); 
+    tangkapDataMahasiswa(); // Memanggil fetch data saat controller 
+diinisialisasi 
+  } 
+ 
+  Future<void> tangkapDataMahasiswa() async { 
+    final response = await http.get(Uri.parse(apiUrl)); 
+ 
+    if (response.statusCode == 200) { 
+      List<dynamic> data = json.decode(response.body); 
+      mahasiswaList.value = data.map((item) => 
+Mahasiswa.fromJson(item)).toList(); 
+    } else { 
+       Exception('Gagal Ambil Data mahasiswa'); 
+    } 
+  } 
+ 
+  Future<void> addMahasiswa(Mahasiswa mahasiswa) async { 
+    final response = await http.post(Uri.parse(apiUrl), 
+        headers: {"Content-Type": "application/json"}, 
+        body: json.encode(mahasiswa.toJson())); 
+ 
+    if (response.statusCode == 201) { 
+      mahasiswaList.add(Mahasiswa.fromJson(json.decode(response.body))); 
+    } else { 
+      throw Exception('Gagal Simpan Data mahasiswa'); 
+    } 
+  } 
+ 
+  Future<void> updateMahasiswa(int id, Mahasiswa mahasiswa) async { 
+    final response = await http.put(Uri.parse('$apiUrl/$id'), 
+        headers: {"Content-Type": "application/json"}, 
+        body: json.encode(mahasiswa.toJson())); 
+ 
+    if (response.statusCode == 200) { 
+      final index = mahasiswaList.indexWhere((m) => m.id == id); 
+      if (index != -1) { 
+        mahasiswaList[index] = Mahasiswa.fromJson(json.decode(response.body)); 
+      } 
+    } else { 
+      throw Exception(‘ Gagal Ubah Data mahasiswa'); 
+    } 
+  } 
+ 
+  Future<void> deleteMahasiswa(int id) async { 
+    final response = await http.delete(Uri.parse('$apiUrl/$id')); 
+ 
+    if (response.statusCode == 204) { 
+      mahasiswaList.removeWhere((m) => m.id == id); 
+    } else { 
+      throw Exception('Gagal Hapus Data mahasiswa'); 
+    } 
+  } 
+} 
+ 
+- 
+Persiapan View Mahasiswa 
+Buat folder dengan nama views didalam folder lib, kemudian buat file dengan nama 
+mahasiswa_view.dart dan ketikan kode seperti berikut: 
+import 'package:flutter/material.dart'; 
+import 'package:get/get.dart'; 
+import '../controllers/mahasiswa_controller.dart'; 
+ 
+class MahasiswaView extends StatelessWidget { 
+   MahasiswaView({super.key}); 
+  final MahasiswaController controller = Get.put(MahasiswaController()); 
+ 
+ 
+  @override 
+  Widget build(BuildContext context) { 
+    return Scaffold( 
+      appBar: AppBar( 
+        title: Text("Data Mahasiswa"), 
+      ), 
+      body: Column( 
+        children: [ 
+          Expanded( 
+            child: Obx(() { 
+              // Memastikan list mahasiswa telah terisi 
+              if (controller.mahasiswaList.isEmpty) { 
+                return Center(child: Text("Tidak ada data mahasiswa")); 
+              } 
+ 
+              return ListView.builder( 
+                itemCount: controller.mahasiswaList.length, 
+                itemBuilder: (context, index) { 
+                  final mahasiswa = controller.mahasiswaList[index]; 
+                  return Card( 
+                    margin: EdgeInsets.all(10), 
+                    elevation: 5, 
+                    child: Padding( 
+                      padding: const EdgeInsets.all(15.0), 
+                      child: Column( 
+                        crossAxisAlignment: CrossAxisAlignment.start, 
+                        children: [ 
+                          Text( 
+                            mahasiswa.nama, 
+                            style: TextStyle(fontWeight: FontWeight.bold, 
+fontSize: 18), 
+                          ), 
+                          SizedBox(height: 5), 
+                          Text("NPM: ${mahasiswa.npm}"), 
+                          Text("Email: ${mahasiswa.email}"), 
+                          Text("Tempat Lahir: ${mahasiswa.tempatLahir}"), 
+                          Text("Tanggal Lahir: ${mahasiswa.tanggalLahir}"), 
+                          Text("Jenis Kelamin: ${mahasiswa.sex == 'Laki-Laki' 
+? 'Laki-Laki' : 'Perempuan'}"), 
+                          SizedBox(height: 10), 
+                          OverflowBar( 
+                            alignment: MainAxisAlignment.end, 
+                            children: <Widget>[ 
+                              TextButton( 
+                                child: Text('Hapus'), 
+                                onPressed: () { 
+                                  controller.hapusMahasiswa(mahasiswa.id!); 
+                                }, 
+                              ), 
+                            ], 
+                          ), 
+                        ], 
+                      ), 
+                    ), 
+                  ); 
+                }, 
+              ); 
+            }), 
+          ), 
+        ], 
+      ), 
+    ); 
+  } 
+} 
+ 
+- 
+Persiapan Emulator 
+Sebelum menjalankan emulator tambahkan 3 record terlebih dahulu melalui 
+aplikasi postman, kemudian setting url pada mahasiswa_controller dengan 
+ketentuan sebagai berikut: 
+ Dijalankan dengan Emulator Android Studio gunakan  ﬁnal String apiUrl 
+='http://10.0.2.2:8000/api/mahasiswa'; 
+ Dijalankan 
+dengan 
+Flutter 
+Run 
+gunakan 
+ﬁnal 
+String 
+apiUrl 
+= 
+'http://127.0.0.1:8000/api/mahasiswa'; 
+atau 
+ﬁnal 
+String 
+apiUrl 
+= 
+'http://mahasiswa-api.test/api/mahasiswa';  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+PERTEMUAN II 
+ 
+2.1 Kode Tambah Data Mahasiswa 
+Pada folder views buatlah file dengan nama tambah_mahasiwa.dart, file ini 
+digunakan untuk membuat tampilan halaman input data mahasiswa pada saat user 
+menekan tombol tambah mahasiswa, Silahkan ketikan ketikan kode seperti 
+berikut: 
+import 'package:flutter/material.dart'; 
+import 'package:get/get.dart'; 
+import '../controllers/mahasiswa_controller.dart'; 
+import '../models/mahasiswa.dart'; 
+ 
+class TambahMahasiswaView extends StatelessWidget { 
+  final MahasiswaController controller = Get.find(); 
+   
+  final TextEditingController npmController = TextEditingController(); 
+  final TextEditingController namaController = TextEditingController(); 
+  final TextEditingController emailController = TextEditingController(); 
+  final TextEditingController telpController = TextEditingController(); 
+  final TextEditingController alamatController = TextEditingController(); 
+  final TextEditingController tempatLahirController = TextEditingController(); 
+  final TextEditingController tanggalLahirController = 
+TextEditingController(); 
+  final TextEditingController sexController = TextEditingController(); 
+ 
+  TambahMahasiswaView({super.key}); 
+ 
+  @override 
+  Widget build(BuildContext context) { 
+    return Scaffold( 
+      appBar: AppBar( 
+        title: Text("Tambah Mahasiswa"), 
+      ), 
+      body: SingleChildScrollView(  // Menggunakan SingleChildScrollView 
+        padding: const EdgeInsets.all(16.0), 
+        child: Column( 
+          children: [ 
+            TextField( 
+              controller: npmController, 
+              decoration: InputDecoration(labelText: "NPM"), 
+            ), 
+            TextField( 
+              controller: namaController, 
+              decoration: InputDecoration(labelText: "Nama"), 
+            ), 
+            TextField( 
+              controller: emailController, 
+              decoration: InputDecoration(labelText: "Email"), 
+            ), 
+            TextField( 
+              controller: telpController, 
+              decoration: InputDecoration(labelText: "Telepon"), 
+            ), 
+            TextField( 
+              controller: alamatController, 
+              decoration: InputDecoration(labelText: "Alamat"), 
+            ), 
+            TextField( 
+              controller: tempatLahirController, 
+              decoration: InputDecoration(labelText: "Tempat Lahir"), 
+            ), 
+            TextField( 
+              controller: tanggalLahirController, 
+              decoration: InputDecoration(labelText: "Tanggal Lahir (YYYY-MM-
+DD)"), 
+            ), 
+            TextField( 
+              controller: sexController, 
+              decoration: InputDecoration(labelText: "Jenis Kelamin (L/P)"), 
+            ), 
+            SizedBox(height: 20), 
+            ElevatedButton( 
+              onPressed: () { 
+                // Menambahkan mahasiswa 
+                final mahasiswa = Mahasiswa( 
+                  npm: npmController.text, 
+                  nama: namaController.text, 
+                  email: emailController.text, 
+                  telp: telpController.text, 
+                  tempatLahir: tempatLahirController.text, 
+                  tanggalLahir: tanggalLahirController.text, 
+                  sex: sexController.text, 
+                  alamat: alamatController.text, 
+                  photo: null, // Sesuaikan jika Anda memiliki URL untuk foto 
+                ); 
+                controller.simpanMahasiswa(mahasiswa); 
+                Get.back(); // Kembali ke halaman mahasiswa 
+              }, 
+              child: Text("Simpan"), 
+            ), 
+          ], 
+        ), 
+      ), 
+    ); 
+  } 
+} 
+ 
+2.2 Kode View Mahasiswa 
+Pada folder views buat ﬁle baru mahasiswa_view01.dart untuk membuat 
+desain tampilan data mahasiswa yang terdapat tombol data, kemudian ketikan 
+kode seperti berikut ini : 
+import 'package:flutter/material.dart'; 
+import 'package:get/get.dart'; 
+import '../controllers/mahasiswa_controller.dart'; 
+//import '../models/mahasiswa.dart'; 
+import 'tambah_mahasiswa.dart';  
+class MahasiswaView extends StatelessWidget { 
+  final MahasiswaController controller = Get.put(MahasiswaController()); 
+ 
+  MahasiswaView({super.key}); 
+ 
+  @override 
+  Widget build(BuildContext context) { 
+    return Scaffold( 
+      appBar: AppBar( 
+        title: Text("Data Mahasiswa"), 
+      ), 
+      body: Column( 
+        children: [ 
+          Expanded( 
+            child: Obx(() { 
+              if (controller.mahasiswaList.isEmpty) { 
+                return Center(child: Text("Tidak ada data mahasiswa")); 
+              } 
+              return ListView.builder( 
+                itemCount: controller.mahasiswaList.length, 
+                itemBuilder: (context, index) { 
+                  final mahasiswa = controller.mahasiswaList[index]; 
+                  return Card( 
+                    margin: EdgeInsets.all(10), 
+                    elevation: 5, 
+                    child: Padding( 
+                      padding: const EdgeInsets.all(15.0), 
+                      child: Row( 
+                        children: [ 
+                          CircleAvatar( 
+                            radius: 30, 
+                            backgroundImage: NetworkImage(mahasiswa.photo ?? 
+'https://w7.pngwing.com/pngs/358/81/png-transparent-computer-icons-graduation-
+ceremony-college-student-financial-aid-graduated-people-logo-graduation-
+ceremony.png'), // Ganti dengan URL foto 
+                          ), 
+                          SizedBox(width: 10), 
+                          Expanded( 
+                            child: Column( 
+                              crossAxisAlignment: CrossAxisAlignment.start, 
+                              children: [ 
+                                Text( 
+                                  mahasiswa.nama, 
+                                  style: TextStyle(fontWeight: 
+FontWeight.bold, fontSize: 18), 
+                                ), 
+                                Text("NPM: ${mahasiswa.npm}"), 
+                                Text("Email: ${mahasiswa.email}"), 
+                              ], 
+                            ), 
+                          ), 
+                          IconButton( 
+                            icon: Icon(Icons.delete), 
+                            onPressed: () { 
+                              controller.hapusMahasiswa(mahasiswa.id!); 
+                            }, 
+                          ), 
+                        ], 
+                      ), 
+                    ), 
+                  ); 
+                }, 
+              ); 
+            }), 
+          ), 
+          ElevatedButton( 
+            onPressed: () { 
+              Get.to(() => TambahMahasiswaView()); // Navigasi ke halaman 
+tambah mahasiswa 
+            }, 
+            child: Text("Tambah Mahasiswa"), 
+          ), 
+        ], 
+      ), 
+    ); 
+  } 
+} 
+ 
+ 
+ 
+ 
+ 
+Kemudian pada ﬁle main.dart ubah struktur kode import library seperti dibawah ini: 
+ 
+ 
+ 
+2.3 Kode Ubah Data Mahasiswa 
+- 
+Buat ﬁle dengan nama ubah_mahasiswa.dart pada folder views kemudian 
+ketikan kode seperti berikut: 
+import 'package:flutter/material.dart'; 
+import 'package:get/get.dart'; 
+import '../controllers/mahasiswa_controller.dart'; 
+import '../models/mahasiswa.dart'; 
+ 
+class EditMahasiswaView extends StatefulWidget { 
+  final Mahasiswa mahasiswa; 
+ 
+  EditMahasiswaView({required this.mahasiswa}); 
+ 
+  @override 
+  _EditMahasiswaViewState createState() => _EditMahasiswaViewState(); 
+} 
+ 
+class _EditMahasiswaViewState extends State<EditMahasiswaView> { 
+  final MahasiswaController controller = Get.find(); 
+ 
+  // Kontroler untuk input data 
+  final TextEditingController npmController = TextEditingController(); 
+  final TextEditingController namaController = TextEditingController(); 
+  final TextEditingController emailController = TextEditingController(); 
+  final TextEditingController telpController = TextEditingController(); 
+  final TextEditingController alamatController = TextEditingController(); 
+  final TextEditingController tempatLahirController = TextEditingController(); 
+  final TextEditingController tanggalLahirController = 
+TextEditingController(); 
+  final TextEditingController sexController = TextEditingController(); 
+ 
+  @override 
+  void initState() { 
+    super.initState(); 
+    // Inisialisasi kontroler dengan data mahasiswa yang ada 
+    npmController.text = widget.mahasiswa.npm; 
+    namaController.text = widget.mahasiswa.nama; 
+    emailController.text = widget.mahasiswa.email; 
+    telpController.text = widget.mahasiswa.telp; 
+    alamatController.text = widget.mahasiswa.alamat;  
+    tempatLahirController.text = widget.mahasiswa.tempatLahir; 
+    tanggalLahirController.text = widget.mahasiswa.tanggalLahir; 
+    sexController.text = widget.mahasiswa.sex; 
+  } 
+ 
+  @override 
+  Widget build(BuildContext context) { 
+    return Scaffold( 
+      appBar: AppBar( 
+        title: Text("Edit Mahasiswa"), 
+      ), 
+      body: Padding( 
+        padding: const EdgeInsets.all(16.0), 
+        child: SingleChildScrollView(  
+          child: Column( 
+            children: [ 
+              TextField( 
+                controller: npmController, 
+                decoration: InputDecoration(labelText: "NPM"), 
+              ), 
+              TextField( 
+                controller: namaController, 
+                decoration: InputDecoration(labelText: "Nama"), 
+              ), 
+              TextField( 
+                controller: emailController, 
+                decoration: InputDecoration(labelText: "Email"), 
+              ), 
+              TextField( 
+                controller: telpController, 
+                decoration: InputDecoration(labelText: "Telepon"), 
+              ), 
+              TextField( 
+                controller: alamatController, // Inputan untuk alamat 
+                decoration: InputDecoration(labelText: "Alamat"), 
+              ), 
+              TextField( 
+                controller: tempatLahirController, 
+                decoration: InputDecoration(labelText: "Tempat Lahir"), 
+              ), 
+              TextField( 
+                controller: tanggalLahirController, 
+                decoration: InputDecoration(labelText: "Tanggal Lahir (YYYY-
+MM-DD)"), 
+              ), 
+              TextField( 
+                controller: sexController, 
+                decoration: InputDecoration(labelText: "Jenis Kelamin "), 
+              ), 
+              SizedBox(height: 20), 
+              ElevatedButton( 
+                onPressed: () { 
+                  // Membuat objek mahasiswa yang diperbarui tanpa foto 
+                  final updatedMahasiswa = Mahasiswa( 
+                    id: widget.mahasiswa.id, 
+                    npm: npmController.text, 
+                    nama: namaController.text, 
+                    email: emailController.text, 
+                    telp: telpController.text, 
+                    alamat: alamatController.text, 
+                    tempatLahir: tempatLahirController.text, 
+                    tanggalLahir: tanggalLahirController.text, 
+                    sex: sexController.text, 
+                    photo: widget.mahasiswa.photo, 
+                     // Pertahankan foto yang sama 
+                  ); 
+ 
+                  // Memanggil metode update di controller 
+                  controller.ubahMahasiswa(widget.mahasiswa.id!,updatedMahasis
+wa); 
+                  Get.back(); // Kembali ke halaman sebelumnya 
+                }, 
+                child: Text("Simpan Perubahan"), 
+              ), 
+            ], 
+          ), 
+        ), 
+      ), 
+    ); 
+  } 
+} 
+ 
+- 
+Buka File mahasiswa_view01.dart kemudian tambahkan Icon Ubah yang letaknya 
+di atas Tombol Icon Hapus seperti kode berikut ini: 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+- 
+Jalankan Emulator dan lakukan perubahan 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+PERTEMUAN III 
+ 
+3.1 Persiapan Model ,Controller, Route dan Migration Matakuliah 
+- 
+Ketikan Terminal pada VS Code project Mahasiswa-api seperti berikut : 
+php artisan make:model MataKuliah -m 
+ 
+- 
+Silahkan buka file migration mata kuliah kemudian ketikan kode seperti berikut: 
+ 
+ 
+Kemudian ketikan kode pada terminal : 
+php artisan migrate 
+ 
+ 
+ 
+ 
+- 
+Persiapan Controller Mata kuliah 
+Pada VS Code Terminal Ketikan  
+php artisan make:controller MataKuliahController –resource 
+ 
+ Pada bagian function index() ketikan kode seperti berikut: 
+ public function index() 
+    { 
+        return MataKuliah::all(); 
+    } 
+ 
+ Pada bagian function create() ketikan kode seperti berikut: 
+ public function store(Request $request) 
+    { 
+        $mataKuliah = MataKuliah::create($request->all()); 
+        return response()->json($mataKuliah, 201); 
+    } 
+ 
+ Pada bagian function show() ketikan kode seperti berikut: 
+ public function show($id) 
+    { 
+        return MataKuliah::find($id); 
+    } 
+ 
+ Pada bagian function update() ketikan kode seperti berikut: 
+   public function update(Request $request, $id) 
+    { 
+        $mataKuliah = MataKuliah::find($id); 
+        $mataKuliah->update($request->all()); 
+        return response()->json($mataKuliah, 200); 
+    } 
+ 
+ Pada bagian function destroy() ketikan kode seperti berikut: 
+public function destroy($id) 
+    { 
+        MataKuliah::destroy($id); 
+        return response()->json(null, 204); 
+    } 
+ 
+- 
+Pada bagian use library Controller Mata Kuliah tambahkan kode seperti berikut: 
+ 
+- 
+Pada model Mata Kuliah ketikan kode seperti berikut ini: 
+ 
+- 
+Pada route api.php ketikan kode seperti berikut ini: 
+ 
+Pada terminal ketikan kode seperti berikut: 
+Php artisan route:list untuk melihat route yang didaftar di API 
+ 
+ 
+- 
+Pengujian API untuk simpan data , silahkan buka postman dan ikuti seperti 
+tampilan dibawah ini : 
+ 
+- 
+Pengujian Tampil data, silahkan buka postman kemudian ikuti langkah 
+seperti tampilan dibawah ini: 
+ 
+- 
+Pengujian Ubah Data, silahkan buka postman kemudian ikut langkah 
+seperti langkah dibawah ini: 
+ 
+ 
+3.2 Persiapan Model, Controller dan View Mata Kuliah pada Flutter Mobile 
+- 
+Buat file pada folder model untuk project flutter dengan nama mata_kuliah.dart 
+kemudian ketikan kode seperti berikut: 
+ 
+ 
+ 
+- 
+Buat file pada folder controller dengan nama matakuliah_controller.dart kemudian 
+ketikan kode seperti berikut: 
+import 'dart:convert'; 
+import 'package:http/http.dart' as http; 
+import 'package:praktikumakademik/models/mata_kuliah.dart'; 
+import '../controllers/matakuliah_controller.dart'; 
+ 
+class ApiService { 
+ // final String baseUrl = "http://localhost:8000/api/mata-kuliah"; 
+   final String baseUrl ='http://10.0.2.2:8000/api/mahasiswa'; 
+ 
+  Future<List<MataKuliah>> fetchMataKuliah() async { 
+    final response = await http.get(Uri.parse(baseUrl)); 
+    if (response.statusCode == 200) { 
+      List jsonResponse = json.decode(response.body); 
+      return jsonResponse.map((data) => MataKuliah.fromJson(data)).toList(); 
+    } else { 
+      throw Exception('Gagal untuk load mata kuliah'); 
+    } 
+  } 
+ 
+  Future<MataKuliah> createMataKuliah(MataKuliah mataKuliah) async { 
+    final response = await http.post( 
+      Uri.parse(baseUrl), 
+      headers: <String, String>{ 
+        'Content-Type': 'application/json; charset=UTF-8', 
+      }, 
+      body: json.encode(mataKuliah.toJson()), 
+    ); 
+ 
+    if (response.statusCode == 201) { 
+      return MataKuliah.fromJson(json.decode(response.body)); 
+    } else { 
+      throw Exception('Gagal Mengambil Data mata kuliah'); 
+    } 
+  } 
+ 
+  Future<MataKuliah> updateMataKuliah(int id, MataKuliah mataKuliah) async { 
+    final response = await http.put( 
+      Uri.parse('$baseUrl/$id'), 
+      headers: <String, String>{ 
+        'Content-Type': 'application/json; charset=UTF-8', 
+      }, 
+      body: json.encode(mataKuliah.toJson()), 
+    ); 
+ 
+    if (response.statusCode == 200) { 
+      return MataKuliah.fromJson(json.decode(response.body)); 
+    } else { 
+      throw Exception('Gagal untuk update mata kuliah'); 
+    } 
+  } 
+ 
+  Future<void> deleteMataKuliah(int id) async { 
+    final response = await http.delete( 
+      Uri.parse('$baseUrl/$id'), 
+      headers: <String, String>{ 
+        'Content-Type': 'application/json; charset=UTF-8', 
+      }, 
+    ); 
+ 
+    if (response.statusCode != 204) { 
+      throw Exception('Gagal untuk hapus mata kuliah'); 
+    } 
+  } 
+} 
+ 
+- 
+Buat file pada folder views dengan nama matakuliah_view.dart kemudian ketikan kode 
+seperti berikut: 
+ import 'package:flutter/material.dart'; 
+import '../controllers/matakuliah_controller.dart'; 
+import '../models/mata_kuliah.dart'; 
+ 
+class MatakuliahView extends StatefulWidget { 
+  @override 
+  _MataKuliahListState createState() => _MataKuliahListState(); 
+} 
+ 
+class _MataKuliahListState extends State<MatakuliahView > { 
+  late Future<List<MataKuliah>> futureMataKuliah; 
+ 
+  @override 
+  void initState() { 
+    super.initState(); 
+    futureMataKuliah = ApiService().fetchMataKuliah(); 
+  } 
+ 
+  Future<void> _showForm(BuildContext context, {MataKuliah? mataKuliah}) { 
+    final kodeController = TextEditingController(text: mataKuliah?.kode); 
+    final matakuliahController = TextEditingController(text: 
+mataKuliah?.matakuliah); 
+    final sksController = TextEditingController(text: mataKuliah != null ? 
+mataKuliah.sks.toString() : ''); 
+    final semesterController = TextEditingController(text: mataKuliah != null 
+? mataKuliah.semester.toString() : ''); 
+ 
+    return showDialog( 
+      context: context, 
+      builder: (context) { 
+        return AlertDialog( 
+          title: Text(mataKuliah == null ? 'Tambah Mata Kuliah' : 'Ubah Mata 
+Kuliah'), 
+          content: Column( 
+            mainAxisSize: MainAxisSize.min, 
+            children: [ 
+              TextField( 
+                controller: kodeController, 
+                decoration: InputDecoration(labelText: 'Kode'), 
+              ), 
+              TextField( 
+                controller: matakuliahController, 
+                decoration: InputDecoration(labelText: 'Nama Mata Kuliah'), 
+              ), 
+              TextField( 
+                controller: sksController, 
+                decoration: InputDecoration(labelText: 'SKS'), 
+                keyboardType: TextInputType.number, 
+              ), 
+              TextField( 
+                controller: semesterController, 
+                decoration: InputDecoration(labelText: 'Semester'), 
+                keyboardType: TextInputType.number, 
+              ), 
+            ], 
+          ), 
+          actions: [ 
+            TextButton( 
+              onPressed: () { 
+                if (mataKuliah == null) { 
+                  // Tambah data 
+                  ApiService().createMataKuliah(MataKuliah( 
+                    id: 0, // sementara untuk ID, kita tidak akan 
+menggunakannya saat menambah 
+                    kode: kodeController.text, 
+                    matakuliah: matakuliahController.text, 
+                    sks: int.parse(sksController.text), 
+                    semester: int.parse(semesterController.text), 
+                  )).then((_) { 
+                    Navigator.of(context).pop(); 
+                    setState(() { 
+                      futureMataKuliah = ApiService().fetchMataKuliah(); 
+                    }); 
+                  }); 
+                } else { 
+                  // Ubah data 
+                  ApiService().updateMataKuliah(mataKuliah.id, MataKuliah( 
+                    id: mataKuliah.id, 
+                    kode: kodeController.text, 
+                    matakuliah: matakuliahController.text, 
+                    sks: int.parse(sksController.text), 
+                    semester: int.parse(semesterController.text), 
+                  )).then((_) { 
+                    Navigator.of(context).pop(); 
+                    setState(() { 
+                      futureMataKuliah = ApiService().fetchMataKuliah(); 
+                    }); 
+                  }); 
+                } 
+              }, 
+              child: Text(mataKuliah == null ? 'Tambah' : 'Ubah'), 
+            ), 
+            TextButton( 
+              onPressed: () { 
+                Navigator.of(context).pop(); 
+              }, 
+              child: Text('Batal'), 
+            ), 
+          ], 
+        ); 
+      }, 
+    ); 
+  } 
+ 
+  Future<void> _deleteMataKuliah(int id) async { 
+    await ApiService().deleteMataKuliah(id); 
+    setState(() { 
+      futureMataKuliah = ApiService().fetchMataKuliah(); // Refresh data 
+    }); 
+  } 
+ 
+  @override 
+  Widget build(BuildContext context) { 
+    return Scaffold( 
+      appBar: AppBar( 
+        title: Text('Mata Kuliah'), 
+        actions: [ 
+          IconButton( 
+            icon: Icon(Icons.add), 
+            onPressed: () => _showForm(context), 
+          ), 
+        ], 
+      ), 
+      body: FutureBuilder<List<MataKuliah>>( 
+        future: futureMataKuliah, 
+        builder: (context, snapshot) { 
+          if (snapshot.connectionState == ConnectionState.waiting) { 
+            return Center(child: CircularProgressIndicator()); 
+          } else if (snapshot.hasError) { 
+            return Center(child: Text('Error: ${snapshot.error}')); 
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) { 
+            return Center(child: Text('ID Mata Kuliah Kosong')); 
+          } 
+ 
+          List<MataKuliah> mataKuliahs = snapshot.data!; 
+          return ListView.builder( 
+            itemCount: mataKuliahs.length, 
+            itemBuilder: (context, index) { 
+              return ListTile( 
+                title: Text(mataKuliahs[index].matakuliah), 
+                subtitle: Text('Kode: ${mataKuliahs[index].kode}, SKS: 
+${mataKuliahs[index].sks}'), 
+                trailing: Row( 
+                  mainAxisSize: MainAxisSize.min, 
+                  children: [ 
+                    IconButton( 
+                      icon: Icon(Icons.edit), 
+                      onPressed: () => _showForm(context, mataKuliah: 
+mataKuliahs[index]), 
+                    ), 
+                    IconButton( 
+                      icon: Icon(Icons.delete), 
+                      onPressed: () { 
+                        _deleteMataKuliah(mataKuliahs[index].id); 
+                      }, 
+                    ), 
+                  ], 
+                ), 
+              ); 
+            }, 
+          ); 
+        }, 
+      ), 
+    ); 
+  } 
+} 
+ 
+ 
+ 
+ Pengujian Tampilan Tambah Data, silahkan klik icon tanda (+) pada pojok 
+kanan atas kemudian isikan data seperti berikut: 
+ 
+ 
+ Pengujian Tampilan Ubah Data, Silakan klik Icon ubah (Pencil) pada baris data 
+kemudian ubah data seperti berikut: 
+ 
+ Untuk Hapus Data silahkan klik icon tempat sampah saja  
+ 
+ 
+ 
+ 
+ 
+ 
+3.3 Report PDF data Mata Kuliah 
+- 
+Pada file pubspec.yaml tambahkan library seperti dibawah ini: 
+ 
+ 
+Pada terminal VS Code Ketikan Kode Seperti berikut: 
+flutter pub get 
+- 
+Pada file matakuliah_view.dart tambahkan library seperti gambar dibawah 
+ini: 
+ 
+ 
+- 
+Pada file matakuliah_view.dart di atas method _showform() ketikan kode 
+seperti berikut: 
+ Future<void> generatePdf(List<MataKuliah> mataKuliahs) async { 
+    final pdf = pw.Document(); 
+ 
+    pdf.addPage( 
+      pw.Page( 
+        build: (pw.Context context) { 
+          return pw.Column( 
+            children: [ 
+              pw.Text('Laporan Mata Kuliah', style: pw.TextStyle(fontSize: 
+24)), 
+              pw.SizedBox(height: 20), 
+              pw.Table.fromTextArray( 
+                headers: ['Kode', 'Mata Kuliah', 'SKS', 'Semester'], 
+                data: mataKuliahs.map((mataKuliah) { 
+                  return [mataKuliah.kode, mataKuliah.matakuliah, 
+mataKuliah.sks.toString(), mataKuliah.semester.toString()]; 
+                }).toList(), 
+              ), 
+            ], 
+          ); 
+        }, 
+      ), 
+    ); 
+ 
+    await Printing.layoutPdf( 
+      onLayout: (PdfPageFormat format) async => pdf.save(), 
+    ); 
+  } 
+ 
+Agar library berhasil terinstall dengan baik untuk print pdf silahkan stop 
+debugging dan jalan kan lagi 
+- 
+Tambahkan Icon Cetak PDF disamping tanda icon (+) dibagain kode seperti tampilan 
+dibawah ini: 
+ 
+- 
+Silahkan isikan data mata kuliah minimal 5 baris untuk tes cetak pdf agar datanya 
+lumanyan banyak 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+PERTEMUAN IV 
+ 
+4.1 Persiapan Menu Side atau Drawer Menu 
+- 
+Buat file pada folder views dengan nama homescreen.dart kemudian ketikan kode 
+seperti berikut: 
+import 'package:flutter/material.dart'; 
+import 'mahasiswa_views01.dart'; 
+import 'matakuliah_view.dart'; 
+ 
+ 
+class HomeScreen extends StatelessWidget { 
+  @override 
+  Widget build(BuildContext context) { 
+    return Scaffold( 
+      appBar: AppBar( 
+        title: Text('Home'), 
+        backgroundColor: Colors.blueAccent, 
+      ), 
+      drawer: Drawer( 
+        child: ListView( 
+          padding: EdgeInsets.zero, 
+          children: <Widget>[ 
+            DrawerHeader( 
+              child: Column( 
+                children: [ 
+                  Image.network( 
+                    'https://uniska-bjm.ac.id/wp-content/uploads/2021/08/logo-
+uniska-ok-300x300.png',  // Ganti dengan URL gambar Anda 
+                    fit: BoxFit.fill, // Memenuhi seluruh area 
+                    width: 100,  // Kanvas penuh 
+                    height: 90,       // Tinggi gambar 
+                  ), 
+                  SizedBox(height:3), 
+                  Text( 
+                    'Admin', 
+                    style: TextStyle( 
+                      color: Colors.white, 
+                      fontSize: 20, 
+                    ), 
+                  ), 
+                ], 
+              ), 
+               
+              decoration: BoxDecoration( 
+                color: Colors.blue, 
+              ), 
+            ), 
+            ListTile( 
+              leading: Icon(Icons.emoji_people_rounded), 
+              title: Text('Mahasiswa'), 
+              onTap: () { 
+                // Handle home tap 
+                Navigator.push( 
+                  context, 
+                  MaterialPageRoute(builder: (context) => MahasiswaView()), 
+                  ); 
+              }, 
+            ), 
+            ListTile( 
+              leading: Icon(Icons.verified_user_sharp), 
+              title: Text('Mata Kuliah'), 
+              onTap: () { 
+                // Handle settings tap 
+                Navigator.push( 
+                  context, 
+                  MaterialPageRoute(builder: (context) => MatakuliahView()), 
+               
+                  ); 
+              }, 
+            ), 
+            ListTile( 
+              leading: Icon(Icons.schedule), 
+              title: Text('Jadwal Kuliah'), 
+              onTap: () { 
+                // Handle about tap 
+                Navigator.pop(context); 
+              }, 
+            ), 
+          ], 
+        ), 
+      ), 
+      body: Center( 
+        child: Text( 
+          'PRAKTIKUM MOBILE SEMESTER 7/8', 
+          style: TextStyle( 
+            fontSize: 20, 
+          ), 
+        ), 
+      ), 
+    ); 
+  } 
+} 
+ 
+ 
+4.2 Persiapan Web API Jadwal 
+- 
+Ketikan pada terminal project Web API seperti dibawah ini: 
+php artisan make:model Jadwal -m 
+ 
+- 
+Buka file migration pembuatan jadwal kemudian ketikan kode seperti berikut: 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+- 
+Buka file model jadwal.php kemudian tambahkan baris kode seperti dibawah ini: 
+ 
+- 
+Pembuatan Controller Jadwal kuliah, silahkan ketikan kode seperti berikut 
+pada Terminal VS Code : 
+php artisan make:controller JadwalController 
+ 
+ 
+ 
+ 
+ 
+Kemudian buka file jadwal controller dan ketikan kode seperti dibawah ini: 
+<?php  
+namespace App\Http\Controllers; 
+ 
+use App\Models\Jadwal; 
+use Illuminate\Http\Request; 
+ 
+class JadwalController extends Controller 
+{ 
+    public function index() 
+    { 
+        return Jadwal::all(); 
+    } 
+ 
+    public function store(Request $request) 
+    { 
+        $validated = $request->validate([ 
+            'nama_matakuliah' => 'required|string', 
+            'tanggal' => 'required|date', 
+            'jam' => 'required|string', 
+            'ruangan' => 'required|string', 
+        ]); 
+ 
+        $jadwal = Jadwal::create($validated); 
+ 
+        return response()->json($jadwal, 201); 
+    } 
+ 
+    public function show($id) 
+    { 
+        return Jadwal::find($id); 
+    } 
+ 
+    public function update(Request $request, $id) 
+    { 
+        $validated = $request->validate([ 
+            'nama_matakuliah' => 'required|string', 
+            'tanggal' => 'required|date', 
+            'jam' => 'required|string', 
+            'ruangan' => 'required|string', 
+        ]); 
+ 
+        $jadwal = Jadwal::find($id); 
+        $jadwal->update($validated); 
+ 
+        return response()->json($jadwal, 200); 
+    } 
+ 
+    public function destroy($id) 
+    { 
+        Jadwal::destroy($id); 
+        return response()->json(null, 204); 
+    } 
+} 
+ 
+ 
+ 
+- 
+Buka File route api.php kemudian ketikan kode seperti berikut ini: 
+ 
+ 
+4.3 Persiapan Model,Controller dan View Pada Flutter 
+- 
+Buat file pada folder model pada project flutter dengan nama jadwal.dart, kemudian 
+ketikan kode seperti berikut: 
+class Jadwal { 
+  final int? id; 
+  final String namaMatakuliah; 
+  final String tanggal; 
+  final String jam; 
+  final String ruangan; 
+ 
+  Jadwal({this.id, required this.namaMatakuliah, required this.tanggal, 
+required this.jam, required this.ruangan}); 
+ 
+  factory Jadwal.fromJson(Map<String, dynamic> json) { 
+    return Jadwal( 
+      id: json['id'], 
+      namaMatakuliah: json['nama_matakuliah'], 
+      tanggal: json['tanggal'], 
+      jam: json['jam'], 
+      ruangan: json['ruangan'], 
+    ); 
+  } 
+ 
+  Map<String, dynamic> toJson() { 
+    return { 
+      'nama_matakuliah': namaMatakuliah, 
+      'tanggal': tanggal, 
+      'jam': jam, 
+      'ruangan': ruangan, 
+    }; 
+  } 
+} 
+ 
+- 
+Buat file pada folder controller dengan nama jadwal_controller.dart kemudian ketikan 
+kode seperti berikut ini: 
+import 'dart:convert'; 
+import 'package:http/http.dart' as http; 
+import '../models/jadwal.dart'; 
+ 
+class JadwalService { 
+  final String baseUrl ='http://10.0.2.2:8000/api/jadwal'; // Ganti dengan URL 
+API Anda 
+ 
+  Future<List<Jadwal>> getJadwal() async { 
+    final response = await http.get(Uri.parse(baseUrl)); 
+    if (response.statusCode == 200) { 
+      List jsonResponse = json.decode(response.body); 
+      return jsonResponse.map((data) => Jadwal.fromJson(data)).toList(); 
+    } else { 
+      throw Exception('Failed to load data'); 
+    } 
+  } 
+ 
+  Future<Jadwal> createJadwal(Jadwal jadwal) async { 
+    final response = await http.post( 
+      Uri.parse(baseUrl), 
+      headers: <String, String>{ 
+        'Content-Type': 'application/json; charset=UTF-8', 
+      }, 
+      body: json.encode(jadwal.toJson()), 
+    ); 
+ 
+    if (response.statusCode == 201) { 
+      return Jadwal.fromJson(json.decode(response.body)); 
+    } else { 
+      throw Exception('Failed to create jadwal'); 
+    } 
+  } 
+ 
+  Future<Jadwal> updateJadwal(int id, Jadwal jadwal) async { 
+    final response = await http.put( 
+      Uri.parse('$baseUrl/$id'), 
+      headers: <String, String>{ 
+        'Content-Type': 'application/json; charset=UTF-8', 
+      }, 
+      body: json.encode(jadwal.toJson()), 
+    ); 
+ 
+    if (response.statusCode == 200) { 
+      return Jadwal.fromJson(json.decode(response.body)); 
+    } else { 
+      throw Exception('Failed to update jadwal'); 
+    } 
+  } 
+ 
+  Future<void> deleteJadwal(int id) async { 
+    final response = await http.delete(Uri.parse('$baseUrl/$id')); 
+    if (response.statusCode != 204) { 
+      throw Exception('Failed to delete jadwal'); 
+    } 
+  } 
+} 
+ 
+- 
+Buat file pada folder view dengan nama jadwal_view.dart kemudian ketikan kode 
+seperti berikut : 
+import 'package:flutter/material.dart'; 
+import 'package:praktikumakademik/models/jadwal.dart'; 
+import 'package:praktikumakademik/controllers/jadwal_controller.dart'; 
+ 
+ 
+class JadwalPage extends StatefulWidget { 
+  @override 
+  _JadwalPageState createState() => _JadwalPageState(); 
+} 
+ 
+class _JadwalPageState extends State<JadwalPage> { 
+  final JadwalService _service = JadwalService(); 
+  List<Jadwal> _jadwalList = []; 
+  late Jadwal _selectedJadwal; 
+ 
+  @override 
+  void initState() { 
+    super.initState(); 
+    _fetchJadwal(); 
+  } 
+ 
+  Future<void> _fetchJadwal() async { 
+    List<Jadwal> jadwalList = await _service.getJadwal(); 
+    setState(() { 
+      _jadwalList = jadwalList; 
+    }); 
+  } 
+ 
+void _showForm(BuildContext context, {Jadwal? jadwal}) { 
+  final isEdit = jadwal != null; 
+ 
+  // Pindahkan deklarasi `jadwal` agar tidak digunakan sebelum dideklarasikan. 
+  final String? namaMatakuliah = isEdit ? jadwal!.namaMatakuliah : ''; 
+  final String? tanggal = isEdit ? jadwal.tanggal : ''; 
+  final String? jam = isEdit ? jadwal.jam : ''; 
+  final String? ruangan = isEdit ? jadwal.ruangan : ''; 
+ 
+  // Jika Anda menggunakan TextEditingController 
+  final namaMatakuliahController = TextEditingController(text: 
+namaMatakuliah); 
+  final tanggalController = TextEditingController(text: tanggal); 
+  final jamController = TextEditingController(text: jam); 
+  final ruanganController = TextEditingController(text: ruangan); 
+ 
+  // Rest of your modal implementation... 
+  showModalBottomSheet( 
+    context: context, 
+    builder: (context) { 
+      return Padding( 
+        padding: const EdgeInsets.all(16.0), 
+        child: Column( 
+          mainAxisSize: MainAxisSize.min, 
+          children: [ 
+            TextField(controller: namaMatakuliahController, decoration: 
+InputDecoration(labelText: 'Nama Mata Kuliah')), 
+            TextField(controller: tanggalController, decoration: 
+InputDecoration(labelText: 'Tanggal (YYYY-MM-DD)')), 
+            TextField(controller: jamController, decoration: 
+InputDecoration(labelText: 'Jam')), 
+            TextField(controller: ruanganController, decoration: 
+InputDecoration(labelText: 'Ruangan')), 
+            SizedBox(height: 20), 
+            ElevatedButton( 
+              child: Text(isEdit ? 'Update' : 'Simpan'), 
+              onPressed: () { 
+                final newJadwal = Jadwal( 
+                  id: isEdit ? jadwal.id : null, 
+                  namaMatakuliah: namaMatakuliahController.text, 
+                  tanggal: tanggalController.text, 
+                  jam: jamController.text, 
+                  ruangan: ruanganController.text, 
+                ); 
+ 
+                if (isEdit) { 
+                  _service.updateJadwal(jadwal.id!, newJadwal).then((_) { 
+                    _fetchJadwal(); 
+                    Navigator.pop(context); 
+                  }); 
+                } else { 
+                  _service.createJadwal(newJadwal).then((_) { 
+                    _fetchJadwal(); 
+                    Navigator.pop(context); 
+                  }); 
+                } 
+              }, 
+            ) 
+          ], 
+        ), 
+      ); 
+    }, 
+  ); 
+} 
+ 
+  void _deleteJadwal(int id) { 
+    _service.deleteJadwal(id).then((_) { 
+      _fetchJadwal(); 
+    }); 
+  } 
+ 
+  @override 
+  Widget build(BuildContext context) { 
+    return Scaffold( 
+      appBar: AppBar(title: Text('Jadwal')), 
+      body: ListView.builder( 
+        itemCount: _jadwalList.length, 
+        itemBuilder: (context, index) { 
+          final jadwal = _jadwalList[index]; 
+          return ListTile( 
+            title: Text(jadwal.namaMatakuliah), 
+            subtitle: Text('${jadwal.tanggal} - ${jadwal.jam} 
+(${jadwal.ruangan})'), 
+            trailing: Row( 
+              mainAxisSize: MainAxisSize.min, 
+              children: [ 
+                IconButton( 
+                  icon: Icon(Icons.edit), 
+                  onPressed: () => _showForm(context, jadwal: jadwal), 
+                ), 
+                IconButton( 
+                  icon: Icon(Icons.delete), 
+                  onPressed: () => _deleteJadwal(jadwal.id!), 
+                ), 
+              ], 
+            ), 
+            onTap: () => _showForm(context, jadwal: jadwal), 
+          ); 
+        }, 
+      ), 
+      floatingActionButton: FloatingActionButton( 
+        child: Icon(Icons.add), 
+        onPressed: () => _showForm(context), 
+      ), 
+    ); 
+  } 
+} 
+ 
+4.4 Persiapan Slide Menu 
+- 
+Buat file pada folder view dengan nama homescreen.dart kemudian ketikan kode 
+seperti berikut: 
+import 'package:flutter/material.dart'; 
+import 'mahasiswa_views01.dart'; 
+import 'matakuliah_view.dart'; 
+import 'jadwal_view.dart'; 
+ 
+ 
+class HomeScreen extends StatelessWidget { 
+  const HomeScreen({super.key}); 
+ 
+  @override 
+  Widget build(BuildContext context) { 
+    return Scaffold( 
+      appBar: AppBar( 
+        title: Text('Home'), 
+        backgroundColor: Colors.blueAccent, 
+      ), 
+      drawer: Drawer( 
+        child: ListView( 
+          padding: EdgeInsets.zero, 
+          children: <Widget>[ 
+            DrawerHeader( 
+              decoration: BoxDecoration( 
+                color: Colors.blue, 
+              ), 
+              child: Column( 
+                children: [ 
+                  Image.network( 
+                    'https://uniska-bjm.ac.id/wp-content/uploads/2021/08/logo-
+uniska-ok-300x300.png',  // Ganti dengan URL gambar Anda 
+                    fit: BoxFit.fill, // Memenuhi seluruh area 
+                    width: 100,  // Kanvas penuh 
+                    height: 90,       // Tinggi gambar 
+                  ), 
+                  SizedBox(height:3), 
+                  Text( 
+                    'Admin', 
+                    style: TextStyle( 
+                      color: Colors.white, 
+                      fontSize: 20, 
+                    ), 
+                  ), 
+                ], 
+              ), 
+            ), 
+            ListTile( 
+              leading: Icon(Icons.emoji_people_rounded), 
+              title: Text('Mahasiswa'), 
+              onTap: () { 
+                // Handle home tap 
+                Navigator.push( 
+                  context, 
+                  MaterialPageRoute(builder: (context) => MahasiswaView()), 
+                  ); 
+              }, 
+            ), 
+            ListTile( 
+              leading: Icon(Icons.verified_user_sharp), 
+              title: Text('Mata Kuliah'), 
+              onTap: () { 
+                
+                Navigator.push( 
+                  context, 
+                  MaterialPageRoute(builder: (context) => MatakuliahView()), 
+               
+                  ); 
+              }, 
+            ), 
+            ListTile( 
+              leading: Icon(Icons.schedule), 
+              title: Text('Jadwal Kuliah'), 
+              onTap: () { 
+                Navigator.push( 
+                  context, 
+                  MaterialPageRoute(builder: (context) => JadwalPage()), 
+               
+                  ); 
+              }, 
+            ), 
+          ], 
+        ), 
+      ), 
+      body: Center( 
+        child: Text( 
+          'PRAKTIKUM MOBILE SEMESTER 7/8', 
+          style: TextStyle( 
+            fontSize: 20, 
+          ), 
+        ), 
+      ), 
+    ); 
+  } 
+} 
+ 
+- 
+Pada file main.dart ubah struktur kode seperti berikut: 
+import 'package:flutter/material.dart'; 
+import 'package:get/get.dart'; 
+import 'views/homescreen.dart'; 
+ 
+void main() { 
+  runApp(const MyApp()); 
+} 
+ 
+class MyApp extends StatelessWidget { 
+  const MyApp({super.key}); 
+ 
+  @override 
+  Widget build(BuildContext context) { 
+    return GetMaterialApp( 
+      title: 'Mahasiswa App', 
+      theme: ThemeData( 
+        primarySwatch: Colors.blue, 
+      ), 
+      home:HomeScreen(), 
+    ); 
+  } 
+} 
+ 
+ 
+ 
+ 
+- 
+Jalankan Emulator dan lakukan transaksi Simpan,Ubah, dan Hapus Data 
+ Simpan 
+ 
+ Ubah 
+ 
+ 
+TUGAS MANDIRI “BUATKAN KODE CETAK PDF” 
